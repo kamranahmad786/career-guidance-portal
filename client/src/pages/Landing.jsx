@@ -42,7 +42,11 @@ const Landing = () => {
         setSelectedFile,
         handleSendMessage, 
         chatEndRef 
-    } = useChat();
+    } = useChat([
+        { role: 'assistant', content: "Hello! I'm EduDisha AI, your personal career mentor. I see you excel at pattern recognition and logic." },
+        { role: 'user', content: "I really enjoy mathematics and solving complex puzzles!" },
+        { role: 'assistant', content: "That's fantastic! Have you considered a career in Robotics Engineering? Your aptitude in mathematics perfectly aligns with that path.", showButtons: true }
+    ]);
 
     return (
         <div className="bg-background text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">

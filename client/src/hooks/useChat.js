@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 
-const useChat = () => {
-    const [messages, setMessages] = useState([
-        { role: 'assistant', content: "Hello! I'm EduDisha AI, your personal career mentor. I see you excel at pattern recognition and logic." },
-        { role: 'user', content: "I really enjoy mathematics and solving complex puzzles!" },
-        { role: 'assistant', content: "That's fantastic! Have you considered a career in Robotics Engineering? Your aptitude in mathematics perfectly aligns with that path.", showButtons: true }
+const useChat = (initialMessages = []) => {
+    const [messages, setMessages] = useState(initialMessages.length > 0 ? initialMessages : [
+        { role: 'assistant', content: "Welcome to EduDisha AI! How can I assist your career journey today?" }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [selectedFile, setSelectedFile] = useState(null);
