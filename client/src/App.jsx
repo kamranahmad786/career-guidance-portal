@@ -16,6 +16,15 @@ import ActivityGames from './pages/student/ActivityGames';
 import QuizResults from './pages/student/QuizResults';
 import Profile from './pages/student/Profile';
 import Settings from './pages/student/Settings';
+import ParentLayout from './layouts/ParentLayout';
+import ParentOverview from './pages/parent/Overview';
+import ParentProfile from './pages/parent/Profile';
+import ParentResults from './pages/parent/Results';
+import ParentCareers from './pages/parent/Careers';
+import ParentProgress from './pages/parent/Progress';
+import ParentActivities from './pages/parent/Activities';
+import ParentNotifications from './pages/parent/Notifications';
+import QuizReportDetail from './pages/parent/QuizReportDetail';
 
 // Define other missing pages as stubs if they don't exist yet to prevent errors
 const NotFound = () => <div className="p-8 text-red-500"><h2 className="text-xl">404 - Page Not Found</h2></div>;
@@ -42,9 +51,21 @@ function App() {
             <Route path="/student/profile" element={<Profile />} />
             <Route path="/student/settings" element={<Settings />} />
 
-            {/* Teacher, Parent & Admin Placeholders */}
+            {/* Parent Routes - 100% Stable Routed Architecture */}
+            <Route path="/parent" element={<ParentLayout />}>
+              <Route index element={<ParentOverview />} />
+              <Route path="dashboard" element={<ParentOverview />} />
+              <Route path="profile" element={<ParentProfile />} />
+              <Route path="results" element={<ParentResults />} />
+              <Route path="careers" element={<ParentCareers />} />
+              <Route path="progress" element={<ParentProgress />} />
+              <Route path="activities" element={<ParentActivities />} />
+              <Route path="notifications" element={<ParentNotifications />} />
+              <Route path="result/:id" element={<QuizReportDetail />} />
+            </Route>
+
+            {/* Teacher & Admin Placeholders */}
             <Route path="/teacher/dashboard" element={<div className="p-20 text-center"><h1 className="text-3xl font-bold">Teacher Dashboard Coming Soon</h1><p className="mt-4 text-slate-600 font-medium">Welcome, Educator! We are building your specialized tools.</p></div>} />
-            <Route path="/parent/dashboard" element={<div className="p-20 text-center"><h1 className="text-3xl font-bold">Parent Dashboard Coming Soon</h1><p className="mt-4 text-slate-600 font-medium">Welcome, Guardian! Your child's progress tracker is on its way.</p></div>} />
             <Route path="/admin/dashboard" element={<div className="p-20 text-center"><h1 className="text-3xl font-bold">Admin Portal</h1><p className="mt-4 text-slate-600 font-medium">System Management Interface</p></div>} />
 
             <Route path="*" element={<NotFound />} />

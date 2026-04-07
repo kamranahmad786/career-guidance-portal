@@ -3,7 +3,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../common/Loader';
 
-const ProfileSettings = ({ isOpen, onClose }) => {
+const ProfileSettings = ({ isOpen, onClose, parentPrefs }) => {
     const { user, logout, updateUser } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -203,6 +203,26 @@ const ProfileSettings = ({ isOpen, onClose }) => {
                                     </p>
                                     <p className="text-sm font-bold text-on-surface">{user.school || 'Not specified'}</p>
                                 </div>
+
+                                {user.role === 'Parent' && parentPrefs && (
+                                    <div className="p-6 bg-primary/5 rounded-[2rem] border border-primary/10 animate-in fade-in slide-in-from-right-4">
+                                        <h4 className="text-[10px] font-black uppercase text-primary tracking-[0.2em] mb-4">Guardian Preferences</h4>
+                                        <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm border border-primary/10">
+                                                    <span className="material-symbols-outlined text-sm">notifications_active</span>
+                                                </div>
+                                                <p className="text-xs font-black text-on-surface uppercase tracking-widest leading-none">Quiz Completion Alerts</p>
+                                            </div>
+                                            <button 
+                                                onClick={() => parentPrefs.toggleFn(!parentPrefs.notifyOnQuiz)}
+                                                className={`w-14 h-7 rounded-full transition-all relative ${parentPrefs.notifyOnQuiz ? 'bg-primary shadow-lg shadow-primary/20' : 'bg-slate-200'}`}
+                                            >
+                                                <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${parentPrefs.notifyOnQuiz ? 'left-8' : 'left-1'}`}></div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Actions */}

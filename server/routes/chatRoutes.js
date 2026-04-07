@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, optionalProtect } = require('../middleware/authMiddleware');
 const multer = require('multer');
 
 const upload = multer({ 
@@ -9,7 +9,7 @@ const upload = multer({
     storage: multer.memoryStorage() 
 });
 
-// POST /api/chat - Handle career guidance interaction with optional file upload
-router.post('/', protect, upload.single('file'), chatController.handleChat);
+// POST /api/chat - Handle career guidance interaction with optional file upload (Global Access)
+router.post('/', optionalProtect, upload.single('file'), chatController.handleChat);
 
 module.exports = router;

@@ -23,7 +23,8 @@ const userSchema = new mongoose.Schema({
     profilePublic: { type: Boolean, default: false },
     showAnalytics: { type: Boolean, default: true },
     dataSharing: { type: Boolean, default: true }
-  }
+  },
+  profileImage: { type: String, default: null }
 }, { timestamps: true });
 
 userSchema.pre('save', async function(next) {

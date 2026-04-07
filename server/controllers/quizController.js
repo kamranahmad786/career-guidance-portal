@@ -1,6 +1,7 @@
 const Quiz = require('../models/Quiz');
 const Result = require('../models/Result');
 const Notification = require('../models/Notification');
+const ParentProfile = require('../models/ParentProfile');
 const { calculateParameterScores, analyzeInterests } = require('../services/scoringService');
 
 // @desc    Submit a quiz and get interest analysis
@@ -36,6 +37,23 @@ exports.submitQuiz = async (req, res) => {
       message: `You've successfully mapped ${topParameters.length} core parameters. Your career strategy is now synchronized.`,
       link: '/student/results'
     });
+
+    // 5. ALERT PARENT: Create Notification for the linked guardian
+    try {
+      const parentProfile = await ParentProfile.findOne({ childId: req.user._id });
+      if (parentProfile && parentProfile.notifyOnQuiz) {
+        await Notification.create({
+          recipient: parentProfile.user,
+          type: 'quiz_complete',
+          title: `${req.user.name.split(' ')[0]} Finished an Assessment!`,
+          message: `${req.user.name} has completed the latest career aptitude quiz with strong results in ${topParameters.slice(0, 2).join(' & ')}.`,
+          link: `/parent/result/${result._id}`
+        });
+      }
+    } catch (parentErr) {
+      console.error("Failed to notify parent:", parentErr);
+      // Don't fail the whole request if parent notification fails
+    }
 
     res.status(201).json({
         message: 'Quiz submitted successfully',
@@ -235,6 +253,21 @@ exports.getMyResults = async (req, res) => {
   try {
     const results = await Result.find({ studentId: req.user._id }).sort({ createdAt: -1 });
     res.json(results);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc    Get Specific Quiz Result by ID
+// @route   GET /api/quiz/report/:id
+// @access  Private
+exports.getQuizResultById = async (req, res) => {
+  try {
+    const result = await Result.findById(req.params.id);
+    if (!result) {
+      return res.status(404).json({ message: 'Result not found' });
+    }
+    res.json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
