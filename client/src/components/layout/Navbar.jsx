@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
+import BrandLogo from '../common/BrandLogo';
 
 const Navbar = ({ navigate, mobileMenuOpen, setMobileMenuOpen, isLoginHovered, setIsLoginHovered, onOpenSettings }) => {
     const { user } = useContext(AuthContext);
@@ -11,8 +12,8 @@ const Navbar = ({ navigate, mobileMenuOpen, setMobileMenuOpen, isLoginHovered, s
                     
                     {/* Brand Logo */}
                     <div className="flex items-center gap-2 md:gap-3 group cursor-pointer shrink-0" onClick={() => navigate('/')}>
-                        <div className="w-9 h-9 md:w-11 md:h-11 rounded-xl md:rounded-2xl bg-gradient-to-br from-indigo-600 to-blue-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-300">
-                            <span className="material-symbols-outlined text-white text-xl md:text-2xl">explore</span>
+                        <div className="w-9 h-9 md:w-11 md:h-11 rounded-xl md:rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+                            <BrandLogo className="w-6 h-6 md:w-8 md:h-8" />
                         </div>
                         <div className="flex flex-col text-left">
                             <span className="text-lg md:text-xl font-bold tracking-tight text-slate-900 dark:text-white font-headline leading-none">EduDisha</span>

@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import ProfileSettings from '../components/common/ProfileSettings';
 import Loader from '../components/common/Loader';
+import BrandLogo from '../components/common/BrandLogo';
 
 // --- Memoized Resource Card for Elite Performance (Phase 4) ---
 const ResourceCard = memo(({ item, user, favorites, toggleFavorite, navigate, getLevelColor }) => {
@@ -46,12 +47,12 @@ const ResourceCard = memo(({ item, user, favorites, toggleFavorite, navigate, ge
                     </button>
                 </div>
                 
-                {(item.isLocked && !user) && (
-                    <div className="absolute inset-0 bg-on-surface/40 backdrop-blur-[2px] flex flex-col items-center justify-center p-6 text-center">
-                        <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center mb-4 shadow-2xl">
-                            <span className="material-symbols-outlined text-primary text-2xl font-black">lock</span>
+                {!user && (
+                    <div className="absolute top-4 left-4 z-10 animate-in fade-in zoom-in duration-500">
+                        <div className="px-3 py-1.5 rounded-xl bg-on-surface/80 backdrop-blur-md flex items-center gap-1.5 shadow-xl border border-white/10">
+                            <span className="material-symbols-outlined text-[14px] text-primary font-black">lock</span>
+                            <span className="text-[9px] font-black text-white uppercase tracking-widest">Member Only</span>
                         </div>
-                        <p className="text-white text-[10px] font-black uppercase tracking-widest scale-95 opacity-90">Member-Only Access</p>
                     </div>
                 )}
             </div>
@@ -85,12 +86,12 @@ const ResourceCard = memo(({ item, user, favorites, toggleFavorite, navigate, ge
                         </div>
                     </div>
 
-                    {(item.isLocked && !user) ? (
+                    {!user ? (
                         <button 
-                            onClick={() => navigate('/register')}
-                            className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/15 hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
+                            onClick={() => navigate('/login')}
+                            className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest text-xs shadow-xl shadow-primary/20 hover:shadow-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
                         >
-                            Unlock Training
+                            Unlock Access
                             <span className="material-symbols-outlined text-sm font-black">arrow_forward</span>
                         </button>
                     ) : (
@@ -275,8 +276,8 @@ const Library = () => {
                 {/* Branding & Profile Section */}
                 <div className="mb-8 pt-2">
                     <div className="flex items-center gap-3 mb-10 px-2 cursor-pointer" onClick={() => navigate('/')}>
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary flex items-center justify-center shadow-lg text-white">
-                            <span className="material-symbols-outlined text-2xl font-black">explore</span>
+                        <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center shadow-sm border border-slate-100">
+                            <BrandLogo className="w-7 h-7" />
                         </div>
                         <span className="text-2xl font-black tracking-tight text-primary font-headline mt-1">EduDisha</span>
                     </div>
@@ -418,28 +419,30 @@ const Library = () => {
                 </div>
 
                 {/* Resource Grid */}
-                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 no-scroll-shift">
-                    {displayResources.length > 0 ? (
-                        displayResources.map((item) => (
-                            <ResourceCard 
-                                key={item._id}
-                                item={item}
-                                user={user}
-                                favorites={favorites}
-                                toggleFavorite={toggleFavorite}
-                                navigate={navigate}
-                                getLevelColor={getLevelColor}
-                            />
-                        ))
-                    ) : (
-                        <div className="col-span-full py-32 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm">
-                            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                                <span className="material-symbols-outlined text-4xl text-slate-200">search_off</span>
+                <div className="max-w-6xl mx-auto no-scroll-shift">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8 transition-all duration-700">
+                        {displayResources.length > 0 ? (
+                            displayResources.map((item) => (
+                                <ResourceCard 
+                                    key={item._id}
+                                    item={item}
+                                    user={user}
+                                    favorites={favorites}
+                                    toggleFavorite={toggleFavorite}
+                                    navigate={navigate}
+                                    getLevelColor={getLevelColor}
+                                />
+                            ))
+                        ) : (
+                            <div className="col-span-full py-32 text-center bg-white rounded-[3rem] border border-slate-100 shadow-sm">
+                                <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <span className="material-symbols-outlined text-4xl text-slate-200">search_off</span>
+                                </div>
+                                <h3 className="text-xl font-black text-on-surface mb-2">No matching resources</h3>
+                                <p className="text-sm font-medium text-slate-400">Try adjusting your filters or search keywords.</p>
                             </div>
-                            <h3 className="text-xl font-black text-on-surface mb-2">No matching resources</h3>
-                            <p className="text-sm font-medium text-slate-400">Try adjusting your filters or search keywords.</p>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </main>
 

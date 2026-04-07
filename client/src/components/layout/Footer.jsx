@@ -1,4 +1,5 @@
 import React from 'react';
+import BrandLogo from '../common/BrandLogo';
 
 const Footer = () => {
     return (
@@ -33,8 +34,8 @@ const Footer = () => {
                     {/* Brand Column */}
                     <div className="space-y-6 md:space-y-8 text-left">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white flex items-center justify-center text-primary shadow-lg">
-                                <span className="material-symbols-outlined text-xl">explore</span>
+                            <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-slate-800 flex items-center justify-center shadow-lg">
+                                <BrandLogo className="w-7 h-7 md:w-8 md:h-8" />
                             </div>
                             <span className="text-2xl font-black font-headline tracking-tighter">EduDisha</span>
                         </div>
