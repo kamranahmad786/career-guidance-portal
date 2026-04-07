@@ -19,13 +19,24 @@ const Hero = ({ navigate }) => {
                             {user ? (
                                 <>
                                     <button 
-                                        onClick={() => navigate('/student/dashboard')} 
+                                        onClick={() => {
+                                            const role = user.role?.toLowerCase();
+                                            if (role === 'teacher') navigate('/teacher/dashboard');
+                                            else if (role === 'parent') navigate('/parent/dashboard');
+                                            else if (role === 'superadmin' || role === 'admin') navigate('/admin/dashboard');
+                                            else navigate('/student/dashboard');
+                                        }} 
                                         className="bg-primary hover:bg-primary-container text-white px-8 py-3.5 rounded-full font-bold text-base transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-2 group hover:scale-105 active:scale-95"
                                     >
                                         Go to Dashboard <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">dashboard</span>
                                     </button>
                                     <button 
-                                        onClick={() => navigate('/student/profile')}
+                                        onClick={() => {
+                                            const role = user.role?.toLowerCase();
+                                            if (role === 'teacher') navigate('/teacher/profile');
+                                            else if (role === 'parent') navigate('/parent/profile');
+                                            else navigate('/student/profile');
+                                        }}
                                         className="px-8 py-3.5 rounded-full font-bold text-base border-2 border-primary/20 hover:border-primary/40 hover:bg-primary/5 transition-all text-primary flex items-center justify-center gap-2 group"
                                     >
                                         Review Profile <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">account_circle</span>

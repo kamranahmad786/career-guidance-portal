@@ -8,6 +8,8 @@ const Chatbot = () => {
         isThinking,
         inputValue,
         setInputValue,
+        selectedFile,
+        setSelectedFile,
         handleSendMessage,
         chatEndRef
     } = useChat();
@@ -90,19 +92,44 @@ const Chatbot = () => {
 
                     {/* Input Area */}
                     <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+                        {/* File Attachment Badge */}
+                        {selectedFile && (
+                            <div className="mb-3 px-3 py-1.5 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-100 dark:border-indigo-800 rounded-xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-300">
+                                <div className="flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-sm text-indigo-600 dark:text-indigo-400">description</span>
+                                    <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 truncate max-w-[120px]">{selectedFile.name}</span>
+                                </div>
+                                <button 
+                                    onClick={() => setSelectedFile(null)}
+                                    className="w-5 h-5 rounded-full bg-white dark:bg-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-sm hover:scale-110 transition-transform"
+                                >
+                                    <span className="material-symbols-outlined text-xs">close</span>
+                                </button>
+                            </div>
+                        )}
+
                         <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 p-1.5 rounded-full border border-slate-200 dark:border-slate-700 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/20 focus-within:border-indigo-500 transition-all">
+                            <label className="w-8 h-8 rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-slate-400 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors shrink-0">
+                                <span className="material-symbols-outlined text-sm">attach_file</span>
+                                <input 
+                                    type="file" 
+                                    className="hidden" 
+                                    onChange={(e) => setSelectedFile(e.target.files[0])}
+                                    accept=".pdf,image/*"
+                                />
+                            </label>
                             <input
                                 type="text"
                                 value={inputValue}
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                                placeholder="Ask EduDisha AI anything..."
-                                className="flex-1 bg-transparent border-none outline-none text-[13px] font-medium text-slate-700 dark:text-slate-200 px-4 placeholder:text-slate-400"
+                                placeholder={selectedFile ? "Ask about doc..." : "Ask EduDisha AI anything..."}
+                                className="flex-1 bg-transparent border-none outline-none text-[13px] font-medium text-slate-700 dark:text-slate-200 px-2 placeholder:text-slate-400"
                             />
                             <button
                                 onClick={handleSendMessage}
-                                disabled={!inputValue.trim() || isThinking}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all ${inputValue.trim() && !isThinking
+                                disabled={(!inputValue.trim() && !selectedFile) || isThinking}
+                                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all shrink-0 ${(inputValue.trim() || selectedFile) && !isThinking
                                         ? 'bg-indigo-600 text-white hover:bg-indigo-700'
                                         : 'bg-slate-200 dark:bg-slate-700 text-slate-400 cursor-not-allowed'
                                     }`}

@@ -7,6 +7,7 @@ const useChat = () => {
         { role: 'assistant', content: "That's fantastic! Have you considered a career in Robotics Engineering? Your aptitude in mathematics perfectly aligns with that path.", showButtons: true }
     ]);
     const [inputValue, setInputValue] = useState('');
+    const [selectedFile, setSelectedFile] = useState(null);
     const [isThinking, setIsThinking] = useState(false);
     const chatEndRef = useRef(null);
 
@@ -19,18 +20,30 @@ const useChat = () => {
     }, [messages]);
 
     const handleSendMessage = async () => {
-        if (!inputValue.trim() || isThinking) return;
+        if ((!inputValue.trim() && !selectedFile) || isThinking) return;
 
-        const userMessage = { role: 'user', content: inputValue };
+        const userMessage = { role: 'user', content: inputValue || (selectedFile ? `Uploaded: ${selectedFile.name}` : "") };
         setMessages(prev => [...prev, userMessage]);
+        
+        const currentFile = selectedFile;
         setInputValue('');
+        setSelectedFile(null);
         setIsThinking(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/chat', {
+            const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('messages', JSON.stringify([...messages, userMessage]));
+            if (currentFile) {
+                formData.append('file', currentFile);
+            }
+
+            const response = await fetch('/api/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: [...messages, userMessage] })
+                headers: { 
+                    'Authorization': token ? `Bearer ${token}` : ''
+                },
+                body: formData
             });
 
             const data = await response.json();
@@ -39,7 +52,7 @@ const useChat = () => {
             }
         } catch (error) {
             console.error("Chat Error:", error);
-            setMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble connecting to my neural core right now. Please try again in a moment!" }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: "I'm having trouble analyzing your request right now. Please try again in a moment!" }]);
         } finally {
             setIsThinking(false);
         }
@@ -50,6 +63,8 @@ const useChat = () => {
         isThinking,
         inputValue,
         setInputValue,
+        selectedFile,
+        setSelectedFile,
         handleSendMessage,
         chatEndRef
     };

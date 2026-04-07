@@ -1,4 +1,7 @@
 const User = require('../models/User');
+const StudentProfile = require('../models/StudentProfile');
+const TeacherProfile = require('../models/TeacherProfile');
+const ParentProfile = require('../models/ParentProfile');
 const jwt = require('jsonwebtoken');
 
 const generateToken = (id) => {
@@ -10,7 +13,15 @@ const generateToken = (id) => {
 // @desc    Register a new user
 // @route   POST /api/auth/register
 exports.registerUser = async (req, res) => {
-  const { name, email, password, role, phoneNumber } = req.body;
+  const { 
+    name, email, password, role, phoneNumber,
+    // Student fields
+    age, className, schoolName, interests,
+    // Parent fields
+    childName, childGrade,
+    // Teacher fields
+    subject, board
+  } = req.body;
 
   try {
     const userExists = await User.findOne({ email });
@@ -28,6 +39,30 @@ exports.registerUser = async (req, res) => {
     });
 
     if (user) {
+      // Create role-specific profile
+      if (user.role === 'Student') {
+        await StudentProfile.create({
+          user: user._id,
+          age: age || 0,
+          className: className || 'Not specified',
+          schoolName: schoolName || 'Not specified',
+          interests: interests ? (Array.isArray(interests) ? interests : interests.split(',').map(i => i.trim())) : []
+        });
+      } else if (user.role === 'Teacher') {
+        await TeacherProfile.create({
+          user: user._id,
+          subject: subject || 'General',
+          board: board || 'CBSE',
+          schoolName: schoolName || 'Not specified'
+        });
+      } else if (user.role === 'Parent') {
+        await ParentProfile.create({
+          user: user._id,
+          childName: childName || 'Not specified',
+          childGrade: childGrade || 'Not specified'
+        });
+      }
+
       res.status(201).json({
         _id: user._id,
         name: user.name,

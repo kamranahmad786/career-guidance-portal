@@ -27,7 +27,16 @@ const Navbar = ({ navigate, mobileMenuOpen, setMobileMenuOpen, isLoginHovered, s
                                 { name: 'Home', href: '/' },
                                 { name: 'Features', href: '#features' },
                                 { name: 'Process', href: '#how-it-works' },
-                                ...(user ? [{ name: 'Dashboard', onClick: () => navigate('/student/dashboard') }] : []),
+                                ...(user ? [{ 
+                                    name: 'Dashboard', 
+                                    onClick: () => {
+                                        const role = user.role?.toLowerCase();
+                                        if (role === 'teacher') navigate('/teacher/dashboard');
+                                        else if (role === 'parent') navigate('/parent/dashboard');
+                                        else if (role === 'superadmin' || role === 'admin') navigate('/admin/dashboard');
+                                        else navigate('/student/dashboard');
+                                    } 
+                                }] : []),
                                 { name: 'Libraries', href: '/library' },
                                 { name: 'About', href: '#about' },
                                 { name: 'Contact', href: '#contact' }
@@ -112,7 +121,18 @@ const Navbar = ({ navigate, mobileMenuOpen, setMobileMenuOpen, isLoginHovered, s
                     <div className="flex flex-col h-full overflow-y-auto p-6 space-y-2">
                         {[
                             { name: 'Home', href: '#', icon: 'home' },
-                            ...(user ? [{ name: 'Dashboard', onClick: () => { navigate('/student/dashboard'); setMobileMenuOpen(false); }, icon: 'dashboard' }] : []),
+                            ...(user ? [{ 
+                                name: 'Dashboard', 
+                                onClick: () => { 
+                                    const role = user.role?.toLowerCase();
+                                    if (role === 'teacher') navigate('/teacher/dashboard');
+                                    else if (role === 'parent') navigate('/parent/dashboard');
+                                    else if (role === 'superadmin' || role === 'admin') navigate('/admin/dashboard');
+                                    else navigate('/student/dashboard');
+                                    setMobileMenuOpen(false); 
+                                }, 
+                                icon: 'dashboard' 
+                            }] : []),
                             { name: 'Features', href: '#features', icon: 'grid_view' },
                             { name: 'Process', href: '#how-it-works', icon: 'timeline' },
                             { name: 'Libraries', href: '/library', icon: 'auto_stories' },

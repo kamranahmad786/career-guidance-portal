@@ -1,8 +1,8 @@
 import React from 'react';
 
-const AICareerMentor = ({ messages, isThinking, inputValue, setInputValue, handleSendMessage, chatEndRef }) => {
+const AICareerMentor = ({ messages, isThinking, inputValue, setInputValue, selectedFile, setSelectedFile, handleSendMessage, chatEndRef }) => {
     return (
-        <section className="min-h-screen py-24 px-6 w-full mx-auto overflow-hidden flex flex-col justify-center bg-surface-container-lowest">
+        <section className="min-h-screen pt-32 pb-24 px-6 w-full mx-auto overflow-hidden flex flex-col justify-center bg-surface-container-lowest relative z-10" id="ai-mentor">
             <div className="grid lg:grid-cols-2 gap-16 md:gap-20 items-center px-4 md:px-12 lg:px-20">
                 <div className="space-y-10 text-left">
                     <div>
@@ -10,8 +10,9 @@ const AICareerMentor = ({ messages, isThinking, inputValue, setInputValue, handl
                             <span className="material-symbols-outlined text-sm">chat_bubble</span>
                             Always Available
                         </div>
-                        <h2 className="text-3xl md:text-5xl font-extrabold font-headline mb-6 md:mb-8 text-on-surface leading-[1.15]">
-                            Your Personal <span className="text-primary bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">AI Career Mentor</span>
+                        <h2 className="text-4xl md:text-6xl font-black font-headline mb-6 md:mb-8 text-on-surface leading-[1.1]">
+                            Your Personal <br />
+                            <span className="text-primary bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">AI Career Mentor</span>
                         </h2>
                         <p className="text-base md:text-lg text-on-surface-variant leading-relaxed max-w-lg">
                             Never feel lost again. Our AI mentor is trained on global employment trends and educational data to provide expert guidance instantly, day or night.
@@ -96,27 +97,51 @@ const AICareerMentor = ({ messages, isThinking, inputValue, setInputValue, handl
                         </div>
 
                         {/* Chat Input Field */}
-                        <div className="mt-8 p-1.5 bg-surface-container-lowest rounded-full border border-outline-variant shadow-md flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant cursor-pointer hover:bg-slate-200 transition-colors">
-                                <span className="material-symbols-outlined text-xs">attach_file</span>
+                        <div className="mt-8">
+                            {/* File Attachment Badge */}
+                            {selectedFile && (
+                                <div className="mb-3 px-4 py-2 bg-primary/5 border border-primary/20 rounded-xl flex items-center justify-between animate-in slide-in-from-bottom-2 duration-300">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-sm text-primary">description</span>
+                                        <span className="text-[10px] font-bold text-primary truncate max-w-[150px]">{selectedFile.name}</span>
+                                    </div>
+                                    <button 
+                                        onClick={() => setSelectedFile(null)}
+                                        className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform"
+                                    >
+                                        <span className="material-symbols-outlined text-xs">close</span>
+                                    </button>
+                                </div>
+                            )}
+                            
+                            <div className="p-1.5 bg-surface-container-lowest rounded-full border border-outline-variant shadow-md flex items-center gap-2">
+                                <label className="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant cursor-pointer hover:bg-slate-200 transition-colors">
+                                    <span className="material-symbols-outlined text-xs">attach_file</span>
+                                    <input 
+                                        type="file" 
+                                        className="hidden" 
+                                        onChange={(e) => setSelectedFile(e.target.files[0])}
+                                        accept=".pdf,image/*"
+                                    />
+                                </label>
+                                <input 
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                                    placeholder={selectedFile ? "Ask about this document..." : "Ask EduDisha AI about your future..."}
+                                    className="flex-1 text-[12px] font-medium text-slate-700 px-3 bg-transparent outline-none border-none placeholder:text-slate-400"
+                                />
+                                <button 
+                                    onClick={handleSendMessage}
+                                    disabled={(!inputValue.trim() && !selectedFile) || isThinking}
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all active:scale-95 ${
+                                        (inputValue.trim() || selectedFile) && !isThinking ? 'bg-primary text-white cursor-pointer' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                    }`}
+                                >
+                                    <span className="material-symbols-outlined text-lg">arrow_upward</span>
+                                </button>
                             </div>
-                            <input 
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                                placeholder="Ask EduDisha AI about your future..."
-                                className="flex-1 text-[12px] font-medium text-slate-700 px-3 bg-transparent outline-none border-none placeholder:text-slate-400"
-                            />
-                            <button 
-                                onClick={handleSendMessage}
-                                disabled={!inputValue.trim() || isThinking}
-                                className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all active:scale-95 ${
-                                    inputValue.trim() && !isThinking ? 'bg-primary text-white cursor-pointer' : 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                                }`}
-                            >
-                                <span className="material-symbols-outlined text-lg">arrow_upward</span>
-                            </button>
                         </div>
                     </div>
                 </div>

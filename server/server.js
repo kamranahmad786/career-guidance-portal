@@ -21,6 +21,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const resourceRoutes = require('./routes/resourceRoutes');
 const udemyRoutes = require('./routes/udemyRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 
 // App Routes
 app.use('/api/auth', authRoutes);
@@ -31,6 +32,7 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/udemy', udemyRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/contact', contactRoutes);
 
 // --- Production Deployment Logic ---
 if (process.env.NODE_ENV === 'production') {

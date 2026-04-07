@@ -38,6 +38,8 @@ const Landing = () => {
         isThinking, 
         inputValue, 
         setInputValue, 
+        selectedFile,
+        setSelectedFile,
         handleSendMessage, 
         chatEndRef 
     } = useChat();
@@ -67,6 +69,8 @@ const Landing = () => {
                         isThinking={isThinking}
                         inputValue={inputValue}
                         setInputValue={setInputValue}
+                        selectedFile={selectedFile}
+                        setSelectedFile={setSelectedFile}
                         handleSendMessage={handleSendMessage}
                         chatEndRef={chatEndRef}
                     />
