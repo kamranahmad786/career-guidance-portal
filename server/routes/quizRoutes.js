@@ -5,6 +5,7 @@ const {
     getAllQuizzes, 
     getQuizResult, 
     getMyResults,
+    getQuizResultById,
     seedMockQuestions 
 } = require('../controllers/quizController');
 const { protect, authorize } = require('../middleware/authMiddleware');
@@ -18,6 +19,9 @@ router.get('/seed-mock', seedMockQuestions);
 // Student and Admin can both view all questions to take/manage assessments
 router.get('/all', protect, getAllQuizzes);
 router.get('/result/:studentId', protect, getQuizResult);
+
+// Specific report for guardians and students
+router.get('/report/:id', protect, getQuizResultById);
 
 // Student can view their own score history
 router.get('/results/my', protect, getMyResults);

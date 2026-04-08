@@ -1,10 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 const ChildProfile = () => {
-    const { data } = useOutletContext();
+    const { data, fetchDashboard } = useOutletContext();
+    const [email, setEmail] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
-    if (!data?.linked) return <div className="text-center py-20 text-slate-400 font-bold italic">Link a student to view their detailed identity.</div>;
+    const handleLink = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        setSuccess('');
+
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('/api/parent/link-child', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const result = await res.json();
+
+            if (res.ok) {
+                setSuccess('Student account successfully linked!');
+                fetchDashboard(); // Refresh global data
+            } else {
+                setError(result.message || 'Linking failed. Please check the email.');
+            }
+        } catch (err) {
+            setError('System error. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (!data?.linked) return (
+        <div className="max-w-3xl mx-auto py-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="bg-white rounded-[3rem] p-12 shadow-2xl shadow-primary/10 border border-slate-100 text-center">
+                <div className="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center mx-auto mb-8 animate-bounce">
+                    <span className="material-symbols-outlined text-5xl text-primary font-black">person_add</span>
+                </div>
+                <h2 className="text-4xl font-black text-slate-800 mb-4 tracking-tighter">Link Student Account</h2>
+                <p className="text-slate-500 font-bold mb-10 text-lg leading-relaxed">
+                    Enter your child's student email address to start monitoring their academic progress and career trajectory.
+                </p>
+
+                <form onSubmit={handleLink} className="space-y-6">
+                    <div className="relative group">
+                        <span className="absolute left-6 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 group-focus-within:text-primary transition-colors">alternate_email</span>
+                        <input 
+                            type="email"
+                            required
+                            placeholder="student@edudisha.com"
+                            className="w-full pl-14 pr-8 py-5 bg-slate-50 border border-slate-100 rounded-2xl font-bold text-slate-700 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all text-lg"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                    </div>
+                    
+                    {error && (
+                        <div className="p-4 bg-error/5 text-error text-sm font-black rounded-xl border border-error/10 flex items-center gap-3 animate-head-shake">
+                            <span className="material-symbols-outlined">error</span>
+                            {error}
+                        </div>
+                    )}
+
+                    {success && (
+                        <div className="p-4 bg-emerald-50 text-emerald-600 text-sm font-black rounded-xl border border-emerald-100 flex items-center gap-3">
+                            <span className="material-symbols-outlined">check_circle</span>
+                            {success}
+                        </div>
+                    )}
+
+                    <button 
+                        type="submit"
+                        disabled={loading}
+                        className="w-full py-5 bg-primary text-white rounded-2xl font-black text-sm uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.01] active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {loading ? 'Processing Sync...' : 'Establish Secure Connection'}
+                    </button>
+                </form>
+                
+                <p className="mt-8 text-xs font-black text-slate-400 uppercase tracking-widest">
+                    Verification required • Data encrypted • NEP 2020 Compliant
+                </p>
+            </div>
+        </div>
+    );
 
     const child = data.childProfile;
 

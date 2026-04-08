@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import ProfileSettings from '../components/common/ProfileSettings';
+import BrandLogo from '../components/common/BrandLogo';
 import Loader from '../components/common/Loader';
 
 const ParentLayout = () => {
@@ -83,9 +84,7 @@ const ParentLayout = () => {
                     className="w-full flex items-center gap-4 px-8 cursor-pointer bg-[#f8faff] hover:bg-primary/5 transition-all border-b border-slate-100 flex-shrink-0"
                     onClick={() => navigate('/')}
                 >
-                    <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 flex-shrink-0">
-                        <span className="material-symbols-outlined text-white text-xl">hub</span>
-                    </div>
+                    <BrandLogo className="w-9 h-9 flex-shrink-0 shadow-lg shadow-primary/20 rounded-xl overflow-hidden" />
                     <div className="flex flex-col justify-center">
                         <h1 className="text-xl font-black text-primary tracking-tight font-headline leading-none mb-1">EduDisha</h1>
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">Guardian Portal</p>
