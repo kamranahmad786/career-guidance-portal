@@ -105,7 +105,7 @@ npm start
 ---
 
 ## 📄 License & Attribution
-Designed and Developed with ❤️ by **Antigravity AI**.
+Designed and Developed with ❤️ by **Kamran Ahmad**.
 Built for the future of Indian Education.
 
-> *Disclaimer: This project is intended for educational and career advancement purposes, adhering to the data privacy and ethical AI standards.*
+
