@@ -60,7 +60,7 @@ exports.handleChat = async (req, res) => {
             }
         }
 
-        const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" }); // Use latest for multimodal stability
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); 
 
         const systemPrompt = `
             You are EduDisha AI, a professional and friendly AI career mentor for students in India.

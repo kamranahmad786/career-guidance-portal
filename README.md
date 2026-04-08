@@ -1,17 +1,15 @@
-# EduDisha: AI-Powered Career Guidance Portal 🚀
-
-[![Powered by Gemini AI](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-blueviolet?style=for-the-badge&logo=google-gemini)](https://deepmind.google/technologies/gemini/)
+[![Powered by Gemini AI](https://img.shields.io/badge/AI-Gemini%203%20Flash-blueviolet?style=for-the-badge&logo=google-gemini)](https://deepmind.google/technologies/gemini/)
 [![MERN Stack](https://img.shields.io/badge/Stack-MERN-green?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/mern-stack)
 [![NEP 2020 Aligned](https://img.shields.io/badge/Standards-NEP%202020-orange?style=for-the-badge)](https://www.education.gov.in/nep-2020)
 
-**EduDisha** is a production-grade, AI-driven career counselling platform designed to synchronize the aspirations of students, the guidance of educators, and the monitoring of parents. Aligned with the **NEP 2020** guidelines, it leverages advanced cognitive AI to provide personalized career trajectories.
+**EduDisha** is a production-grade, AI-driven career counselling platform built on the cutting-edge **Gemini 3 Flash** intelligence core. It is designed to synchronize the aspirations of students, the guidance of educators, and the monitoring of parents under the **NEP 2020** framework.
 
 ---
 
 ## 🌟 Core Pillars
 
 ### 🎓 Student Portal (Learner Console)
-*   **AI Career Mentor**: An interactive chatbot powered by Gemini 1.5 Flash for real-time career counseling.
+*   **Gemini 3 AI Mentor**: Real-time counseling via the ultrafast Gemini 3 Flash engine.
 *   **Priority Mentorship Alerts**: High-visibility alerts for teacher-assigned quizzes and milestones.
 *   **Career Simulations**: Interactive modules for exploring modern professional fields.
 *   **Gamified Roadmap**: Visual progress tracking of skill development and aptitude gain.
@@ -105,7 +103,7 @@ npm start
 ---
 
 ## 📄 License & Attribution
-Designed and Developed with ❤️ by **Antigravity AI**.
+Designed and Developed with ❤️ by **Kamran Ahmad**.
 Built for the future of Indian Education.
 
-> *Disclaimer: This project is intended for educational and career advancement purposes, adhering to the data privacy and ethical AI standards.*
+
