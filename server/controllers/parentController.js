@@ -41,6 +41,25 @@ exports.linkChildByEmail = async (req, res) => {
             child: { name: student.name, grade: student.grade }
         });
 
+        // 3. ALERT TEACHER: Notify school educators of new guardian engagement
+        try {
+            if (student.school) {
+                const teachers = await User.find({ school: student.school, role: 'Teacher' });
+                const notifications = teachers.map(t => ({
+                    recipient: t._id,
+                    type: 'system',
+                    title: 'New Guardian Enrollment',
+                    message: `A parent has successfully linked with student ${student.name} (${student.grade}). Guardian integration active.`,
+                    link: '/teacher/students'
+                }));
+                if (notifications.length > 0) {
+                    await Notification.insertMany(notifications);
+                }
+            }
+        } catch (notifErr) {
+            console.error("Failed to notify teacher of linking:", notifErr);
+        }
+
     } catch (error) {
         console.error("Link Child Error:", error);
         res.status(500).json({ message: "Internal server error during linking." });

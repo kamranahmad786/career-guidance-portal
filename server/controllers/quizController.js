@@ -2,6 +2,8 @@ const Quiz = require('../models/Quiz');
 const Result = require('../models/Result');
 const Notification = require('../models/Notification');
 const ParentProfile = require('../models/ParentProfile');
+const TeacherProfile = require('../models/TeacherProfile');
+const User = require('../models/User');
 const { calculateParameterScores, analyzeInterests } = require('../services/scoringService');
 
 // @desc    Submit a quiz and get interest analysis
@@ -52,7 +54,25 @@ exports.submitQuiz = async (req, res) => {
       }
     } catch (parentErr) {
       console.error("Failed to notify parent:", parentErr);
-      // Don't fail the whole request if parent notification fails
+    }
+
+    // 6. ALERT TEACHER: Create Notification for school educators
+    try {
+      if (req.user.school) {
+        const teachers = await User.find({ school: req.user.school, role: 'Teacher' });
+        const teacherNotifications = teachers.map(t => ({
+          recipient: t._id,
+          type: 'achievement',
+          title: 'Student Assessment Complete',
+          message: `${req.user.name} from your school has completed a career assessment. Results are ready for review.`,
+          link: `/teacher/students`
+        }));
+        if (teacherNotifications.length > 0) {
+          await Notification.insertMany(teacherNotifications);
+        }
+      }
+    } catch (teacherErr) {
+      console.error("Failed to notify teacher:", teacherErr);
     }
 
     res.status(201).json({

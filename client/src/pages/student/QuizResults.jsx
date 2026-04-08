@@ -27,7 +27,7 @@ const QuizResults = () => {
 
     if (isLoading) {
         return (
-            <div className="flex flex-col items-center justify-center h-screen bg-surface">
+            <div className="flex flex-col items-center justify-center h-64">
                 <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mb-4"></div>
                 <p className="text-slate-400 font-black uppercase tracking-widest text-[10px]">Processing Analytics...</p>
             </div>
@@ -37,7 +37,7 @@ const QuizResults = () => {
     const latestResult = results.length > 0 ? results[0] : null;
 
     return (
-        <div className="min-h-screen bg-surface p-6 md:p-10 lg:p-16 font-body">
+        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <div className="mb-16">

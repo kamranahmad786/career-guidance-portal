@@ -76,7 +76,7 @@ const Profile = () => {
     );
 
     return (
-        <div className="min-h-screen bg-surface font-body p-6 lg:p-12">
+        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
             <div className="max-w-5xl mx-auto">
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-4 mb-10">
                     <button 

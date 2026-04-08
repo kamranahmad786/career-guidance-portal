@@ -38,7 +38,7 @@ const ActivityGames = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-surface p-8 lg:p-12 font-body">
+        <div className="animate-in fade-in slide-in-from-bottom-6 duration-700">
             {/* Header Section */}
             <div className="max-w-7xl mx-auto mb-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
                 <div>

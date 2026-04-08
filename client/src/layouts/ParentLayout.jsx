@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import ProfileSettings from '../components/common/ProfileSettings';
 import BrandLogo from '../components/common/BrandLogo';
 import Loader from '../components/common/Loader';
+import NotificationHub from '../components/common/NotificationHub';
 
 const ParentLayout = () => {
     const { user, logout } = useContext(AuthContext);
@@ -153,14 +154,18 @@ const ParentLayout = () => {
                     style={{ height: '80px' }}
                     className="fixed top-0 left-72 right-0 bg-[#f8faff] backdrop-blur-md z-40 flex justify-between items-center px-8 border-b border-slate-100"
                 >
-                    <div className="flex flex-col justify-center">
-                        <h2 className="text-lg font-black text-slate-900 leading-none mb-1">Parent Portal</h2>
-                        <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Live Sync Active</span>
+                    <div className="flex items-center gap-6">
+                        <div className="flex flex-col justify-center text-right">
+                            <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Guardian Portal</h2>
+                            <div className="flex items-center gap-2 justify-end">
+                                <span className="w-1 h-1 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Live Sync</span>
+                            </div>
                         </div>
                     </div>
-                    <div className="flex items-center gap-4 pl-4 border-l border-slate-100">
+                    <div className="flex items-center gap-6 pl-4 border-l border-slate-100">
+                        <NotificationHub />
+                        <div className="w-px h-8 bg-slate-100 mx-2"></div>
                         <span className="text-sm font-bold text-slate-700 hidden sm:block">{parentName}</span>
                         <div 
                             className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-black text-xs shadow-xl shadow-slate-900/10 cursor-pointer hover:scale-105 active:scale-95 transition-all overflow-hidden"
@@ -176,8 +181,10 @@ const ParentLayout = () => {
                 </header>
 
                 {/* Sub-page Content */}
-                <div className="p-6 lg:p-10 max-w-7xl mx-auto pb-32 md:pb-10">
-                    <Outlet context={{ data, fetchDashboard }} />
+                <div className="pt-[80px]">
+                    <div className="p-6 lg:p-10 max-w-7xl mx-auto pb-32 md:pb-10">
+                        <Outlet context={{ data, fetchDashboard }} />
+                    </div>
                 </div>
             </main>
 

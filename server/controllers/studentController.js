@@ -1,4 +1,6 @@
 const StudentProfile = require('../models/StudentProfile');
+const Notification = require('../models/Notification');
+const User = require('../models/User');
 
 // @desc    Create or update student profile
 // @route   POST /api/student/profile
@@ -44,6 +46,26 @@ exports.upsertProfile = async (req, res) => {
 
       return res.status(201).json(profile);
     }
+    
+    // 3. ALERT TEACHERS: Notify school educators of student profile updates
+    try {
+        if (req.user.school) {
+            const teachers = await User.find({ school: req.user.school, role: 'Teacher' });
+            const notifications = teachers.map(t => ({
+                recipient: t._id,
+                type: 'info',
+                title: 'Student Roster Update',
+                message: `${req.user.name} has synchronized their career profile with new interests and skills markers.`,
+                link: '/teacher/students'
+            }));
+            if (notifications.length > 0) {
+                await Notification.insertMany(notifications);
+            }
+        }
+    } catch (notifErr) {
+        console.error("Failed to notify teacher of profile update:", notifErr);
+    }
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

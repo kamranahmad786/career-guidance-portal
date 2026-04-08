@@ -10,36 +10,40 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
  */
 const generateQuiz = async (parameters) => {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const prompt = `
-      You are an AI career guidance expert designing a standardized quiz.
+      You are an AI career guidance expert designing a standardized aptitude quiz.
       Follow NEP 2020 guidelines for early career awareness.
-      I need you to generate a 72-question quiz in total.
-      There should be EXACTLY 6 multiple-choice questions for each of the following ${parameters.length} parameters:
+      I need you to generate a ${parameters.length * 6}-question quiz.
+      Generate EXACTLY 6 multiple-choice questions for each of the following parameters:
       ${parameters.join(", ")}
 
       Return the response ONLY as a parseable JSON array of objects, strictly in this format:
       [
         {
-          "parameter": "Singing",
-          "questions": [
-            {
-              "question": "When listening to a song, do you...",
-              "options": ["Analyze the vocals", "Enjoy the rhythm", "Ignore it", "Look for lyrics"],
-              "relevantScore": [5, 3, 0, 2]
-            }
-          ]
+          "question": "When you see a complex engine, do you want to...",
+          "options": ["Take it apart", "Draw it", "Look at the manual", "Ignore it"],
+          "correctAnswer": "Take it apart",
+          "parameter": "Robotics"
         }
       ]
-      DO NOT return markdown code blocks, just raw JSON.
+      - The "correctAnswer" MUST be exactly one of the values in the "options" array.
+      - Each object must include the "parameter" it belongs to.
+      - DO NOT return markdown code blocks, just raw JSON.
     `;
 
     const result = await model.generateContent(prompt);
     const textOutput = result.response.text();
     
     // Clean potential markdown wrap if AI ignores the JSON-only instruction
-    const cleanedOutput = textOutput.replace(/```json/g, '').replace(/```/g, '');
-    return JSON.parse(cleanedOutput);
+    const cleanedOutput = textOutput.replace(/```json/g, '').replace(/```/g, '').trim();
+    const parsed = JSON.parse(cleanedOutput);
+    
+    // Support both wrapped and unwrapped formats
+    if (Array.isArray(parsed)) return parsed;
+    if (parsed.questions) return parsed.questions;
+    
+    return parsed;
 
   } catch (error) {
     console.error("Gemini API Error (generateQuiz): ", error);
