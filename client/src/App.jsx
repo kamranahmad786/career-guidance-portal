@@ -25,6 +25,7 @@ import ParentProgress from './pages/parent/Progress';
 import ParentActivities from './pages/parent/Activities';
 import ParentNotifications from './pages/parent/Notifications';
 import QuizReportDetail from './pages/parent/QuizReportDetail';
+import CareerStrategy from './pages/parent/CareerStrategy';
 
 // Define other missing pages as stubs if they don't exist yet to prevent errors
 const NotFound = () => <div className="p-8 text-red-500"><h2 className="text-xl">404 - Page Not Found</h2></div>;
@@ -62,6 +63,7 @@ function App() {
               <Route path="activities" element={<ParentActivities />} />
               <Route path="notifications" element={<ParentNotifications />} />
               <Route path="result/:id" element={<QuizReportDetail />} />
+              <Route path="career-strategy/:careerName" element={<CareerStrategy />} />
             </Route>
 
             {/* Teacher & Admin Placeholders */}

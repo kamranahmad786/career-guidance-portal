@@ -49,7 +49,10 @@ const CareersDetail = () => {
                                     <div className="h-full bg-indigo-600" style={{ width: '85%' }}></div>
                                 </div>
                             </div>
-                            <button className={`w-full py-5 rounded-3xl font-black text-xs uppercase tracking-widest transition-all ${i === 0 ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'bg-slate-50 text-indigo-600 border border-indigo-100 hover:bg-primary hover:text-white hover:border-primary shadow-sm active:scale-95'}`}>
+                            <button 
+                                onClick={() => navigate(`/parent/career-strategy/${career}`)}
+                                className={`w-full py-5 rounded-3xl font-black text-xs uppercase tracking-widest transition-all ${i === 0 ? 'bg-primary text-white shadow-xl shadow-primary/20' : 'bg-slate-50 text-indigo-600 border border-indigo-100 hover:bg-primary hover:text-white hover:border-primary shadow-sm active:scale-95'}`}
+                            >
                                 View Strategy
                             </button>
                         </div>

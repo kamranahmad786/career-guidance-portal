@@ -76,60 +76,89 @@ const ParentLayout = () => {
     return (
         <div className="bg-surface-container-low text-on-surface font-body min-h-screen">
             {/* SideNavBar (Authority: 100% Routed Persistence) */}
-            <aside className="h-screen w-72 flex-col fixed left-0 top-0 bg-white dark:bg-slate-950 flex flex-col gap-2 py-6 pr-4 z-40 hidden md:flex border-r border-slate-100">
-                <div className="px-8 mb-8">
-                    <h1 className="text-xl font-black text-primary tracking-tighter">EduDisha Hub</h1>
-                    <div className="mt-8 flex items-center gap-3 p-4 bg-primary/5 rounded-2xl border border-primary/10">
+            <aside className="fixed left-0 top-0 h-full w-72 flex flex-col bg-white z-50 hidden md:flex border-r border-slate-100 overflow-y-auto">
+                {/* Brand Section - Absolute 80px Sync */}
+                <div
+                    style={{ height: '80px' }}
+                    className="w-full flex items-center gap-4 px-8 cursor-pointer bg-[#f8faff] hover:bg-primary/5 transition-all border-b border-slate-100 flex-shrink-0"
+                    onClick={() => navigate('/')}
+                >
+                    <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20 flex-shrink-0">
+                        <span className="material-symbols-outlined text-white text-xl">hub</span>
+                    </div>
+                    <div className="flex flex-col justify-center">
+                        <h1 className="text-xl font-black text-primary tracking-tight font-headline leading-none mb-1">EduDisha</h1>
+                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none">Guardian Portal</p>
+                    </div>
+                </div>
+
+                <div className="px-6 py-8 flex-1">
+                    {/* Guardian Info Block */}
+                    <div className="mb-10 p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center text-xs font-black shadow-lg shadow-primary/20">
                             {getInitials(childName)}
                         </div>
                         <div className="overflow-hidden">
-                            <p className="text-[10px] font-black uppercase text-primary tracking-widest leading-none mb-1">Guardian Mode</p>
+                            <p className="text-[8px] font-black uppercase text-primary tracking-widest leading-none mb-1">Monitoring</p>
                             <p className="text-sm font-bold text-slate-800 truncate">{childName.split(' ')[0]}</p>
                         </div>
                     </div>
-                </div>
-                <nav className="flex-1 space-y-1">
-                    {navItems.map((item) => (
-                        <Link 
-                            key={item.id} 
-                            to={item.path}
-                            className={`flex items-center justify-between py-3 px-8 rounded-r-full font-bold transition-all group ${location.pathname === item.path ? 'bg-primary text-white shadow-xl shadow-primary/30 translate-x-1' : 'text-slate-500 hover:bg-slate-50 hover:text-primary hover:translate-x-1'}`}
-                        >
-                            <div className="flex items-center gap-4">
-                                <span className={`material-symbols-outlined text-xl transition-transform group-hover:scale-110 ${location.pathname === item.path ? 'text-white' : 'text-slate-300 group-hover:text-primary'}`}>{item.icon}</span>
-                                <span className="text-sm font-medium tracking-wide">{item.id}</span>
-                            </div>
-                            {item.badge > 0 && location.pathname !== item.path && (
-                                <span className="px-2 py-0.5 bg-error text-white text-[9px] font-black rounded-full animate-pulse shadow-sm shadow-error/20">{item.badge}</span>
-                            )}
-                        </Link>
-                    ))}
-                </nav>
-                <div className="mt-auto px-4 space-y-2">
-                    <button onClick={() => setIsSettingsOpen(true)} className="w-full flex items-center gap-4 py-3 px-8 text-slate-400 hover:text-slate-900 transition-all font-black text-xs uppercase tracking-widest">
-                        <span className="material-symbols-outlined text-lg">settings</span>
-                        Settings
-                    </button>
-                    <button 
-                        onClick={() => { localStorage.removeItem('token'); logout(); navigate('/login'); }}
-                        className="w-full flex items-center gap-4 py-3 px-8 text-error hover:bg-error-container/5 rounded-r-full transition-all font-black text-xs uppercase tracking-widest group"
-                    >
-                        <span className="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">logout</span>
-                        Sign Out
-                    </button>
+
+                    <nav className="space-y-1.5">
+                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest px-4 mb-4">Navigation</p>
+                        {navItems.map((item) => {
+                            const isActive = location.pathname === item.path;
+                            return (
+                                <button 
+                                    key={item.id} 
+                                    onClick={() => navigate(item.path)}
+                                    className={`w-full flex items-center justify-between px-4 py-3.5 transition-all rounded-xl group/item ${isActive ? 'text-primary font-black border-r-4 border-primary bg-primary/5' : 'text-slate-500 hover:text-primary hover:bg-slate-100'}`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <span className={`material-symbols-outlined text-[22px] transition-transform group-hover/item:scale-110 ${isActive ? 'text-primary' : 'text-slate-300 group-hover/item:text-primary'}`}>{item.icon}</span>
+                                        <span className="text-sm font-bold">{item.id}</span>
+                                    </div>
+                                    {item.badge > 0 && !isActive && (
+                                        <span className="px-2 py-0.5 bg-error text-white text-[9px] font-black rounded-full shadow-sm shadow-error/20">{item.badge}</span>
+                                    )}
+                                </button>
+                            );
+                        })}
+
+                        <div className="pt-10 space-y-1.5 border-t border-slate-50 mt-8">
+                            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest px-4 mb-4">System</p>
+                            <button onClick={() => setIsSettingsOpen(true)} className="w-full flex items-center gap-4 px-4 py-3.5 text-slate-500 hover:text-primary hover:bg-slate-100 transition-all rounded-xl">
+                                <span className="material-symbols-outlined text-[22px]">settings</span>
+                                <span className="text-sm font-bold">Portal Settings</span>
+                            </button>
+                            <button onClick={() => navigate('/')} className="w-full flex items-center gap-4 px-4 py-3.5 text-slate-500 hover:text-primary hover:bg-slate-100 transition-all rounded-xl">
+                                <span className="material-symbols-outlined text-[22px]">home</span>
+                                <span className="text-sm font-bold">Main Website</span>
+                            </button>
+                            <button 
+                                onClick={() => { localStorage.removeItem('token'); logout(); navigate('/login'); }}
+                                className="w-full flex items-center gap-4 px-4 py-3.5 text-error-dim hover:bg-error-container/10 transition-all rounded-xl"
+                            >
+                                <span className="material-symbols-outlined text-[22px]">logout</span>
+                                <span className="text-sm font-bold">Sign Out</span>
+                            </button>
+                        </div>
+                    </nav>
                 </div>
             </aside>
 
             {/* Main Content Area */}
             <main className="md:ml-72 min-h-screen">
-                {/* TopNavBar */}
-                <header className="bg-white/80 backdrop-blur-md dark:bg-slate-900/80 shadow-sm flex justify-between items-center w-full px-8 py-4 max-w-full top-0 sticky z-50 border-b border-slate-100">
-                    <div>
-                        <h2 className="text-xl font-black text-slate-900 tracking-tight">Parent Portal</h2>
+                {/* TopNavBar - Fixed with exact height synchronization */}
+                <header 
+                    style={{ height: '80px' }}
+                    className="fixed top-0 left-72 right-0 bg-[#f8faff] backdrop-blur-md z-40 flex justify-between items-center px-8 border-b border-slate-100"
+                >
+                    <div className="flex flex-col justify-center">
+                        <h2 className="text-lg font-black text-slate-900 leading-none mb-1">Parent Portal</h2>
                         <div className="flex items-center gap-2">
                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Live Sync Active</span>
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Live Sync Active</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-4 pl-4 border-l border-slate-100">
