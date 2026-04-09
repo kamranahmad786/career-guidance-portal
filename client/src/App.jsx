@@ -40,6 +40,19 @@ import TeacherReports from './pages/teacher/Reports';
 import TeacherNotifications from './pages/teacher/Notifications';
 import TeacherProfile from './pages/teacher/Profile';
 import TeacherSettings from './pages/teacher/Settings';
+import AdminLayout from './layouts/AdminLayout';
+import AdminDashboard from './pages/admin/Dashboard';
+import UserManagement from './pages/admin/UserManagement';
+import AdminStudents from './pages/admin/Students';
+import AdminTeachers from './pages/admin/Teachers';
+import AdminParents from './pages/admin/Parents';
+import AdminQuizzes from './pages/admin/Quizzes';
+import AdminCourses from './pages/admin/Courses';
+import AdminEvents from './pages/admin/Events';
+import AdminAISystem from './pages/admin/AISystem';
+import AdminReports from './pages/admin/Reports';
+import AdminNotifications from './pages/admin/Notifications';
+import AdminSettings from './pages/admin/Settings';
 
 // Define other missing pages as stubs if they don't exist yet to prevent errors
 const NotFound = () => <div className="p-8 text-red-500"><h2 className="text-xl">404 - Page Not Found</h2></div>;
@@ -98,7 +111,21 @@ function App() {
               <Route path="profile" element={<TeacherProfile />} />
               <Route path="settings" element={<TeacherSettings />} />
             </Route>
-            <Route path="/admin/dashboard" element={<div className="p-20 text-center"><h1 className="text-3xl font-bold">Admin Portal</h1><p className="mt-4 text-slate-600 font-medium">System Management Interface</p></div>} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="users" element={<UserManagement />} />
+              <Route path="students" element={<AdminStudents />} />
+              <Route path="teachers" element={<AdminTeachers />} />
+              <Route path="parents" element={<AdminParents />} />
+              <Route path="quizzes" element={<AdminQuizzes />} />
+              <Route path="courses" element={<AdminCourses />} />
+              <Route path="events" element={<AdminEvents />} />
+              <Route path="ai-system" element={<AdminAISystem />} />
+              <Route path="reports" element={<AdminReports />} />
+              <Route path="notifications" element={<AdminNotifications />} />
+              <Route path="settings" element={<AdminSettings />} />
+            </Route>
 
             <Route path="*" element={<NotFound />} />
           </Routes>

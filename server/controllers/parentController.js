@@ -86,13 +86,35 @@ exports.getParentDashboardData = async (req, res) => {
         // 1. Fetch detailed Student Profile
         const studentProfile = await StudentProfile.findOne({ user: studentId });
 
-        // 2. Fetch Quiz History (Sorted by Date)
-        const resultsHistory = await Result.find({ studentId }).sort({ createdAt: -1 });
+        // 2. Fetch Quiz History (Sorted for Trend Chart: Chronological)
+        const resultsHistory = await Result.find({ studentId }).sort({ createdAt: 1 });
 
-        // 3. Fetch Career History
-        const careerHistory = await Recommendation.find({ studentId }).sort({ createdAt: -1 });
+        // 3. Calculate Score Trend for "User Growth"
+        const scoreTrend = resultsHistory.map(r => ({
+            date: r.createdAt.toLocaleDateString(),
+            score: r.score
+        }));
 
-        // 4. Fetch Parent Notifications
+        // 4. Calculate Skill Strengths (Average per parameter)
+        // Group results by parameter and get average score
+        const skillMap = {};
+        resultsHistory.forEach(r => {
+            if (!skillMap[r.parameter]) {
+                skillMap[r.parameter] = { sum: 0, count: 0 };
+            }
+            skillMap[r.parameter].sum += r.score;
+            skillMap[r.parameter].count += 1;
+        });
+        const skillAlignment = Object.keys(skillMap).map(param => ({
+            label: param,
+            value: Math.round(skillMap[param].sum / skillMap[param].count)
+        })).sort((a, b) => b.value - a.value).slice(0, 5);
+
+        // 5. Fetch Latest Recommendation for Career Interests
+        const latestRec = await Recommendation.findOne({ studentId }).sort({ createdAt: -1 });
+        const topCareers = latestRec ? latestRec.topCareerMatches.map(c => c.careerPath).slice(0, 5) : (studentProfile?.interests || []);
+
+        // 6. Fetch Parent Notifications
         const parentNotifications = await Notification.find({ recipient: req.user._id }).sort({ createdAt: -1 }).limit(20);
 
         res.status(200).json({
@@ -112,11 +134,12 @@ exports.getParentDashboardData = async (req, res) => {
                     board: studentProfile.board,
                     interests: studentProfile.interests,
                     hobbies: studentProfile.hobbies,
-                    skills: studentProfile.skills
-                } : null
+                } : null,
+                skillAlignment,
+                topCareers,
+                scoreTrend
             },
-            resultsHistory,
-            careerHistory,
+            resultsHistory: [...resultsHistory].reverse(), // Send reversed for "Latest Results" lists
             notifications: parentNotifications
         });
 

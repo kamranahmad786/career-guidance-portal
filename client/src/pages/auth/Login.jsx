@@ -25,15 +25,24 @@ const Login = () => {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password, role })
       });
 
       const data = await response.json();
 
       if (response.ok) {
         login(data, data.token);
-        // Redirect to main website (Home) after successful login
-        navigate('/');
+        // Robust Role-Based Redirection
+        const userRole = data.role?.toLowerCase();
+        if (userRole === 'superadmin' || userRole === 'admin') {
+          navigate('/admin');
+        } else if (userRole === 'teacher') {
+          navigate('/teacher');
+        } else if (userRole === 'parent') {
+          navigate('/parent');
+        } else {
+          navigate('/student');
+        }
       } else {
         setError(data.message || 'Invalid email or password');
       }

@@ -43,10 +43,13 @@ const Register = () => {
     setLoading(true);
 
     try {
+      const payload = { ...formData };
+      if (payload.role === 'Admin') payload.role = 'SuperAdmin';
+
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(payload)
       });
 
       const data = await response.json();
